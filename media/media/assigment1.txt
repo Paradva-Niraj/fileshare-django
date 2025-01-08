@@ -1,0 +1,4 @@
+select s.sid,s.s_name,s.city from catalog1 c,supplier1 s where s.sid=c.sid and c.sid in 
+    (select sid from catalog1 where pid in
+        (select pid from part1 where lower(color)='red'));
+
