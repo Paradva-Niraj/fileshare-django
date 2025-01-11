@@ -10,37 +10,23 @@
 
     <!-- File Upload Form -->
     <h3>Upload a File</h3>
-    <form method="post" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <!-- Subject Field -->
-        <div>
-            <label for="id_subject">Subject:</label>
-            {{ form.subject }}
-        </div>
         
-        <!-- File Field -->
-        <div>
-            <label for="id_notefile">File:</label>
-            {{ form.notefile }}
-        </div>
-        
-        <!-- File Type Field -->
-        <div>
-            <label for="id_filetype">File Type:</label>
-            {{ form.filetype }}
-        </div>
-
-        <button type="submit">Upload</button>
+    {{form.as_p}}
+    <button class="btn btn-primary" type="submit">submit</button>
     </form>
 
     <!-- Display Uploaded Files -->
     <h3>Your Uploaded Files</h3>
-    <ul>
+    <ul>{% load filters %}
         {% for note in notes %}
             <li>
-                <strong>{{ note.subject }}</strong> ({{ note.filetype }}) 
-                <a href="{{ note.notefile.url }}" download>Download</a>
+                <strong>{{ note.subject }}</strong> ({{ note.filetype }})
+                <p>File URL: {{ note.photo.url }}</p> 
+                {% comment %} <img src="{{ note.notefile.url }}" />  {% endcomment %}
+                <a href="{{ note.photo.url }}" download="{{ note.photo.url }}" download>Download</a>
             </li>
         {% empty %}
             <p>No files uploaded yet.</p>

@@ -55,7 +55,7 @@ def dashboard_view(request):
     user_notes = NotesForm.objects.filter()
 
     return render(request, 'sharefile/dashboard.html', {
-        'form': form,
+        'form': NotesForm,
         'notes': user_notes,
     })
     
@@ -63,3 +63,15 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have logged out successfully.')
     return redirect('login_view')
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = NotesForm(request.POST, request.FILES)
+        if form.is_valid():
+            tweet = form.save(commit=False)
+            tweet.user = request.user
+            tweet.save()
+            return redirect('dashboard_view')
+    else:
+        form = NotesForm()
+    return render(request, 'sharefile/dashboard.html', {'form': form})
