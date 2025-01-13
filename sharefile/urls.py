@@ -11,6 +11,3 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard_view'),
     path('logout/',views.logout_view, name='logout_view')
 ]
-
-if settings.DEBUG:  # Serve media files in development
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

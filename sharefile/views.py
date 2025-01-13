@@ -3,8 +3,8 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import NotesForm  # Correct import from forms.py
-from .models import NotesForm
+from .forms import NotesForm as nf # Correct import from forms.py
+from .models import NotesForm as mnf
 # Create your views here.
 
 def register_view(request):
@@ -37,25 +37,23 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'sharefile/login.html', {'form': form})
     
-
 @login_required
 def dashboard_view(request):
     if request.method == 'POST':
-        form = NotesForm(request.POST, request.FILES)
+        form = nf(request.POST, request.FILES)
         if form.is_valid():
-            note = form.save(commit=False)
-            note.user = request.user  # Associate the note with the logged-in user
-            note.save()
+            # Associate the note with the logged-in user
+            form.save()
             messages.success(request, "File uploaded successfully!")
             return redirect('dashboard_view')
     else:
-        form = NotesForm()
+        form = nf()
 
     # Fetch all notes uploaded by the current user
-    user_notes = NotesForm.objects.filter()
+    user_notes = mnf.objects.all()
 
     return render(request, 'sharefile/dashboard.html', {
-        'form': NotesForm,
+        'form': form,
         'notes': user_notes,
     })
     
